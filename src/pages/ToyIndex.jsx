@@ -61,7 +61,7 @@ export function ToyIndex() {
         if (newPageIdx >= maxPage) newPageIdx = 0
         setFilterSort({ ...filterBy, pageIdx: newPageIdx, })
     }
-
+console.log('toys:', toys);
     return (
         <section className="toy-index">
             <ToyFilter filterBy={defaultFilter} onSetFilterBy={setFilterSort} />

@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom"
 
 export function AppHeader() {
 
-    const contacts = useSelector((storeState) => storeState.toys)
+    const toys = useSelector((storeState) => storeState.toys)
 
 
     return (

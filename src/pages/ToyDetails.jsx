@@ -21,7 +21,7 @@ export function ToyDetails() {
             .catch(err => {
                 console.error('err:', err)
                 showErrorMsg('Cannot load toy')
-                navigate('/contact')
+                navigate('/toy')
             })
     }
 

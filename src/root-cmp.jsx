@@ -12,7 +12,7 @@ import { AppFooter } from "./cmps/AppFooter.jsx"
 import { Provider } from "react-redux"
 import { store } from "./store/store.js"
 
-
+import "../src/assets/style/main.css"
 
 export function App() {
 
@@ -32,7 +32,6 @@ export function App() {
           </main>
           <AppFooter />
         </section>
-        <div>mister-toy</div>
       </Router>
     </Provider>
   )

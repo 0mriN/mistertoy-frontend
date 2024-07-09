@@ -122,8 +122,8 @@ function getFilterFromSearchParams(searchParams) {
     return filterBy
 }
 
-function getMaxPage(filteredContactsLength) {
-    if (filteredContactsLength) return Promise.resolve(Math.ceil(filteredContactsLength / PAGE_SIZE))
+function getMaxPage(filteredToysLength) {
+    if (filteredToysLength) return Promise.resolve(Math.ceil(filteredToysLength / PAGE_SIZE))
     return storageService.query(TOY_KEY)
         .then(toys => Math.ceil(toys.length / PAGE_SIZE))
         .catch(err => {

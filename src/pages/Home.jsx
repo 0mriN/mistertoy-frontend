@@ -7,7 +7,7 @@ export function Home() {
 
     return (
         <section className="home">
-            <h1>Contact's R Us!</h1>
+            <h1>Toy's R Us!</h1>
         </section>
     )
 }
