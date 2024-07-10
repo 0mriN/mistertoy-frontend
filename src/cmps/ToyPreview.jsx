@@ -6,7 +6,9 @@ export function ToyPreview({ toy }) {
             </h2>
             <img src={`https://robohash.org/${toy._id}?set=set1`} alt="robot pic.."></img>
             <h4>Price: {toy.price}</h4>
-            <h5>In the store since: {toy.createdAt}</h5>
+            <h1 className={toy.inStock ? 'green' : 'red'}>
+          {toy.inStock ? 'In stock' : 'Not in stock'}
+        </h1>
         </article>
     )
 }

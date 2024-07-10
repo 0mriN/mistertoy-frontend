@@ -1,9 +1,23 @@
-import { storageService } from "./async-storage.service.js"
+// import { storageService } from "./async-storage.service.js"
+
+import { httpService } from "./http.service.js"
 import { utilService } from "./util.service.js"
 
+const BASE_URL = 'toy/'
 const TOY_KEY = 'toyDB'
 const PAGE_SIZE = 3
-_createToys()
+// _createToys()
+
+const labels = [
+    'Hero',
+    'Figure',
+    'Art',
+    'Baby',
+    'Doll',
+    'Puzzle',
+    'Outdoor',
+    'Battery Powered',
+]
 
 export const toyService = {
     query,
@@ -12,125 +26,70 @@ export const toyService = {
     save,
     getEmptyToy,
     getDefaultFilter,
-    getFilterFromSearchParams,
+    getDefaultSort,
+    getToyLabels,
 
 }
-// For Debug (easy access from console):
-window.cs = toyService
+
 
 function query(filterBy = {}) {
-    return storageService.query(TOY_KEY)
-        .then(toys => {
-            if (filterBy.name) {
-                const regExp = new RegExp(filterBy.name, 'i')
-                toys = toys.filter(toy => regExp.test(toy.name))
-            }
+    return httpService.get(BASE_URL, { filterBy })
 
-            if (filterBy.price) {
-                toys = toys.filter(toy => toy.price >= filterBy.price)
-            }
-
-            if (filterBy.sort) {
-                if (filterBy.sort === 'name') {
-                    toys = toys.sort((a, b) => a.name.localeCompare(b.name));
-                }
-            }
-
-            const filteredToysLength = toys.length
-            if (filterBy.pageIdx !== undefined) {
-                const startIdx = filterBy.pageIdx * PAGE_SIZE;
-                toys = toys.slice(startIdx, startIdx + PAGE_SIZE)
-            }
-
-            return (getMaxPage(filteredToysLength))
-                .then(maxPage => {
-                    return { toys, maxPage }
-                })
-        })
 }
 
 function get(toyId) {
-    return storageService.get(TOY_KEY, toyId)
-        .then(toy => {
-            toy = _setNextPrevToyId(toy)
-            return toy
-        })
-        .catch(err => {
-            console.error('Cannot get toy:', err)
-            throw err
-        })
+    console.log('toyId:', toyId);
+    return httpService.get(BASE_URL + toyId)
+
 }
 
 function remove(toyId) {
-    return storageService.remove(TOY_KEY, toyId)
-        .then(() => {
-            return (getMaxPage())
-                .then((maxPage) => {
-                    return { maxPage }
-                })
-        })
-        .catch(err => {
-            console.error('Cannot remove toy:', err)
-            throw err
-        })
+    return httpService.delete(BASE_URL + toyId)
+
 }
 
 function save(toy) {
-    return ((toy._id) ? _edit(toy) : _add(toy))
-        .then((savedToy) => {
-            return (getMaxPage())
-                .then((maxPage) =>
-                    ({ maxPage, savedToy })
-                )
-        })
-}
+    const method = toy._id ? 'put' : 'post'
+    return httpService[method](BASE_URL, toy)
 
-function _add(toy) {
-    toy = { ...toy }
-    return storageService.post(TOY_KEY, toy)
-        .catch(err => {
-            console.error('Cannot add toy:', err)
-            throw err
-        })
-}
-
-function _edit(toy) {
-    toy = { ...toy }
-    return storageService.put(TOY_KEY, toy)
-        .catch(err => {
-            console.error('Cannot update toy:', err)
-            throw err
-        })
-}
-
-function getEmptyToy(name = '', price = 0, inStock = true) {
-    return { name, price, inStock }
 }
 
 function getDefaultFilter() {
-    return { name: '', price: 0, pageIdx: 0, sort: '' }
-}
-
-function getFilterFromSearchParams(searchParams) {
-    const filterBy = {
-        name: searchParams.get('name') || '',
-        price: +searchParams.get('price') || 0,
-        pageIdx: +searchParams.get('pageIdx') || 0,
-        sort: searchParams.get('sort') || ''
+    return {
+        name: '',
+        inStock: null,
+        labels: [],
+        pageIdx: 0,
     }
-
-    return filterBy
 }
 
-function getMaxPage(filteredToysLength) {
-    if (filteredToysLength) return Promise.resolve(Math.ceil(filteredToysLength / PAGE_SIZE))
-    return storageService.query(TOY_KEY)
-        .then(toys => Math.ceil(toys.length / PAGE_SIZE))
-        .catch(err => {
-            console.error('Cannot get max page:', err)
-            throw err
-        })
+function getDefaultSort() {
+    return { type: '', desc: 1 }
 }
+
+function getEmptyToy() {
+    return {
+        name: '',
+        price: '',
+        labels: _getRandomLabels(),
+    }
+}
+
+function getToyLabels() {
+    return [...labels]
+}
+
+
+function _getRandomLabels() {
+    const labelsCopy = [...labels]
+    const randomLabels = []
+    for (let i = 0; i < 2; i++) {
+        const randomIdx = Math.floor(Math.random() * labelsCopy.length)
+        randomLabels.push(labelsCopy.splice(randomIdx, 1)[0])
+    }
+    return randomLabels
+}
+
 
 function _createToys() {
     let toys = utilService.loadFromStorage(TOY_KEY)

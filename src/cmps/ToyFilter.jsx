@@ -1,65 +1,78 @@
 
-import { useEffect, useRef, useState } from "react"
-import { utilService } from "../services/util.service.js"
+import { useEffect, useRef, useState } from 'react'
+import { toyService } from '../services/toy.service.js'
+import { utilService } from '../services/util.service.js'
+import { ToySort } from './ToySort.jsx'
 
-export function ToyFilter({ filterBy, onSetFilterBy }) {
+const toyLabels = toyService.getToyLabels()
 
-    const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy })
-    const debouncedSetFilterRef = useRef(utilService.debounce(onSetFilterBy, 500))
+export function ToyFilter({ filterBy, onSetFilter, sortBy, onSetSort }) {
+  const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy })
 
+  const debouncedOnSetFilter = useRef(utilService.debounce(onSetFilter, 300))
 
-    useEffect(() => {
-        debouncedSetFilterRef.current(filterByToEdit)
-    }, [filterByToEdit])
+  useEffect(() => {
+    debouncedOnSetFilter.current(filterByToEdit)
+  }, [filterByToEdit])
 
-    function handleChange({ target }) {
-        const field = target.name
-        let value = target.value
-
-        switch (target.type) {
-            case 'number':
-            case 'range':
-                value = +value || ''
-                break
-
-            case 'checkbox':
-                value = target.checked
-                break
-
-            default: break
-        }
-
-        setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
+  function handleChange({ target }) {
+    let { value, name: field, type } = target
+    if (type === 'select-multiple') {
+      console.log('target.selectedOptions:', target.selectedOptions)
+      value = Array.from(target.selectedOptions, option => option.value || [])
+      console.log('value:', value)
     }
+    value = (type === 'number') ? +value || '' : value
+    setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
+  }
 
-    function onSubmitFilter(ev) {
-        ev.preventDefault()
-        onSetFilterBy(filterByToEdit)
-    }
+  function onSubmitFilter(ev) {
+    ev.preventDefault()
+    onSetFilter(filterByToEdit)
+  }
 
-    const { name, price, inStock } = filterByToEdit
+  const { txt, inStock, labels } = filterByToEdit
 
-    return (
-        <section className="toy-filter">
-            <h2>Filter Toys</h2>
-            <form onSubmit={onSubmitFilter}>
-                <select value={inStock} className="flex justify-center align-center" name="inStock" onChange={(ev) => handleChange(ev)}>
-                    <option value="all" >All</option>
-                    <option value="inStock" >In Stock</option>
-                    <option value="!inStock" >Not in Stock</option>
+  return (
+    <section className="toy-filter">
+      <h3>Toys Filter/Sort</h3>
+      <form onSubmit={onSubmitFilter}>
+        <div className="filter-input-wrapper">
+          <input
+            onChange={handleChange}
+            value={txt}
+            type="text"
+            placeholder="Search"
+            name="txt"
+          />
+          {/* <div className="fa search"></div> */}
+        </div>
 
-                </select>
+        <select name="inStock" value={inStock || ''} onChange={handleChange}>
+          <option value="">All</option>
+          <option value="true">In Stock</option>
+          <option value="false">Not in stock</option>
+        </select>
 
-                <input value={name} onChange={handleChange}
-                    type="search" placeholder="By Name" id="name" name="name"
-                />
-                <label htmlFor="price">Price: </label>
-                <input value={price} onChange={handleChange}
-                    type="number" placeholder="By Price" id="price" name="price"
-                />
-
-                <button hidden>Set Filter</button>
-            </form>
-        </section>
-    )
+        <div>
+          <select
+            multiple
+            name="labels"
+            value={labels || []}
+            onChange={handleChange}
+          >
+            <option value="">Labels</option>
+            <>
+              {toyLabels.map(label => (
+                <option key={label} value={label}>
+                  {label}
+                </option>
+              ))}
+            </>
+          </select>
+        </div>
+      </form>
+      <ToySort sortBy={sortBy} onSetSort={onSetSort} />
+    </section>
+  )
 }

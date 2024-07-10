@@ -1,23 +1,14 @@
-export function PaginationBtns({ onChangePageIdx, filterSortBy }) {
+export function PaginationBtns({ pageIdx, setPageIdx, toysLength }) {
     return (
-        <div className="paging flex align-center">
-            <button
-                className="btn"
-                onClick={() => {
-                    onChangePageIdx(-1)
-                }}
-            >
-                Previous
-            </button>
-            <span>{+filterSortBy.pageIdx + 1}</span>
-            <button
-                className="btn"
-                onClick={() => {
-                    onChangePageIdx(1)
-                }}
-            >
-                Next
-            </button>
-        </div>
+      <div className="pagination">
+        <button onClick={() => setPageIdx(pageIdx - 1)} disabled={pageIdx === 0}>
+          Previous
+        </button>
+        {pageIdx + 1}
+        <button onClick={() => setPageIdx(pageIdx + 1)} disabled={toysLength < 5}>
+          Next
+        </button>
+      </div>
     )
-}
+  }
+  

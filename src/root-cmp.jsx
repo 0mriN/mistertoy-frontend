@@ -11,7 +11,7 @@ import { ToyEdit } from "./pages/ToyEdit.jsx"
 import { AppFooter } from "./cmps/AppFooter.jsx"
 import { Provider } from "react-redux"
 import { store } from "./store/store.js"
-
+//add usermsg
 import "../src/assets/style/main.css"
 
 export function App() {
@@ -26,7 +26,7 @@ export function App() {
               <Route path="/" element={<Home />} />
               <Route path="/toy" element={<ToyIndex />} />
               <Route path="/toy/:toyId" element={<ToyDetails />} />
-              <Route path="/toy/edit/:toyId" element={<ToyEdit />} />
+              <Route path="/toy/edit/:toyId?" element={<ToyEdit />} />
               <Route path="/toy/edit/" element={<ToyEdit />} />
             </Routes>
           </main>

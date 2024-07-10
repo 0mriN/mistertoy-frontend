@@ -1,77 +1,66 @@
 
 
 import { toyService } from "../../services/toy.service.js"
-import { ADD_TOY, REMOVE_TOY, SET_IS_LOADING, SET_MAX_PAGE, SET_TOYS, store, UPDATE_TOY } from "../store"
+import { UPDATE_TOY,ADD_TOY, REMOVE_TOY, SET_IS_LOADING, SET_TOYS,SET_SORT_BY, SET_FILTER_BY,} from "../reducers/toy.reducer.js"
+import { store } from '../store.js'
 
 
 
-export function loadToys(filterSort) {
+export function loadToys(pageIdx) {
+    const { filterBy, sortBy } = store.getState().toyModule
+  
     store.dispatch({ type: SET_IS_LOADING, isLoading: true })
-    return toyService.query(filterSort)
-        .then(({ toys, maxPage }) => {
-            store.dispatch({
-                type: SET_TOYS,
-                toys
-            })
-            _setToysData(maxPage)
-            return toys
-        })
-        .catch(err => {
-            console.error('Cannot load toys:', err)
-            throw err
-        })
-        .finally(() => {
-            store.dispatch({ type: SET_IS_LOADING, isLoading: false })
-        })
-}
+  
+    return toyService.query(filterBy, sortBy, pageIdx)
+      .then(toys => {
+        console.log(toys)
+        store.dispatch({ type: SET_TOYS, toys })
+      })
+      .catch(err => {
+        console.log('toy action -> Cannot load toys')
+        throw err
+      })
+      .finally(() => {
+        console.log("HHI")
+        setTimeout(() => {
+          store.dispatch({ type: SET_IS_LOADING, isLoading: false })
+        }, 350)
+      })
+  }
 
-export function saveToy(toy) {
-    const type = (toy._id) ? UPDATE_TOY : ADD_TOY
+  export function saveToy(toy) {
+    const type = toy._id ? UPDATE_TOY : ADD_TOY
     return toyService.save(toy)
-        .then(({ maxPage, savedToy }) => {
-            store.dispatch({
-                type,
-                toy: savedToy
-            })
-            _setToysData(maxPage)
-            return savedToy
-        })
-        .catch(err => {
-            console.error('Cannot save toy:', err)
-            throw err
-        })
-}
+      .then(toyToSave => {
+        store.dispatch({ type, toy: toyToSave })
+        return toyToSave
+      })
+      .catch(err => {
+        console.log('toy action -> Cannot save toy', err)
+        throw err
+      })
+  }
 
 export function removeToy(toyId) {
-    return toyService.remove(toyId)
-        .then(({ maxPage }) => {
-            store.dispatch({
-                type: REMOVE_TOY,
-                toyId
-            })
-            _setToysData(maxPage)
-        })
-        .catch(err => {
-            console.error('Cannot remove toy:', err)
-            throw err
-        })
-}
-
-export function updateToy(toy) {
-    return toyService.save(toy)
-        .then((savedToy) => {
-            store.dispatch({
-                type: UPDATE_TOY,
-                toy: savedToy
-            })
-        })
+    return toyService
+      .remove(toyId)
+      .then(() => {
+        store.dispatch({ type: REMOVE_TOY, toyId })
+      })
+      .catch(err => {
+        console.log('toy action -> Cannot remove toy', err)
+        throw err
+      })
+  }
 
 
-}
 
-function _setToysData(maxPage) {
-    store.dispatch({
-        type: SET_MAX_PAGE,
-        maxPage
-    })
-}
+export function setFilter(filterBy = toyService.getDefaultFilter()) {
+    store.dispatch({ type: SET_FILTER_BY, filterBy: filterBy })
+  }
+  
+  
+  export function setSort(sortBy = toyService.getDefaultSort()) {
+    store.dispatch({ type: SET_SORT_BY, sortBy: sortBy })
+  }
+  

@@ -1,48 +1,38 @@
+import { useEffect, useState } from 'react'
 
+export function ToySort({ sortBy, onSetSort }) {
+  const [sortByToEdit, setSortByToEdit] = useState({ ...sortBy })
 
-import { useEffect, useRef, useState } from "react"
-import { utilService } from "../services/util.service.js"
+  useEffect(() => {
+    onSetSort(sortByToEdit)
+  }, [sortByToEdit])
 
+  function handleChange({ target }) {
+    const field = target.name
+    const value = target.type === 'number' ? +target.value : target.value
+    setSortByToEdit(prevSort => ({
+      ...prevSort,
+      [field]: field === 'desc' ? -prevSort.desc : value,
+    }))
+  }
 
-export function ToySort({ filterBy, onSetFilterBy }) {
-
-    const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy })
-    const debouncedSetFilterRef = useRef(utilService.debounce(onSetFilterBy, 500))
-
-
-    useEffect(() => {
-        debouncedSetFilterRef.current(filterByToEdit)
-    }, [filterByToEdit])
-
-    function handleChange({ target }) {
-        const field = target.name
-        let value = target.value
-
-        switch (target.type) {
-            case 'number':
-            case 'range':
-                value = +value || ''
-                break
-
-            case 'checkbox':
-                value = target.checked
-                break
-
-            default: break
-        }
-
-        setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
-    }
-
-
-    return (
-        <div className="sort-container">
-            <select value={filterByToEdit.sort} name="sort" onChange={handleChange} id="sort">
-                <option value="">Sort By</option>
-                <option value="name">Name</option>
-                <option value="price">Price</option>
-                <option value="createdAt">createdAt</option>
-            </select>
-        </div>
-    )
+  return (
+    <form className="toy-sort">
+      <select name="type" value={sortByToEdit.type} onChange={handleChange}>
+        <option value="">Sort by</option>
+        <option value="name">Name</option>
+        <option value="price">Price</option>
+        <option value="createdAt">Date</option>
+      </select>
+      <label>
+        <input
+          type="checkbox"
+          name="desc"
+          checked={sortByToEdit.desc < 0}
+          onChange={handleChange}
+        />
+        Descending
+      </label>
+    </form>
+  )
 }

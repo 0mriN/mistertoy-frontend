@@ -72,18 +72,16 @@ function getRandomColor() {
     return color;
 }
 
-function debounce(func, wait) {
-    let timeout;
 
-    return function executedFunction(...args) {
-        const later = () => {
-            timeout = null;
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-};
+function debounce(func, timeout = 300) {
+    let timer
+    return (...args) => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        func.apply(this, args)
+      }, timeout)
+    }
+  }
 
 
 function getFormattedTime(at) {
