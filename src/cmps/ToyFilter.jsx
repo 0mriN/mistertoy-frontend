@@ -31,7 +31,7 @@ export function ToyFilter({ filterBy, onSetFilter, sortBy, onSetSort }) {
     onSetFilter(filterByToEdit)
   }
 
-  const { txt, inStock, labels } = filterByToEdit
+  const { name, inStock, labels } = filterByToEdit
 
   return (
     <section className="toy-filter">
@@ -40,12 +40,11 @@ export function ToyFilter({ filterBy, onSetFilter, sortBy, onSetSort }) {
         <div className="filter-input-wrapper">
           <input
             onChange={handleChange}
-            value={txt}
+            value={name}
             type="text"
             placeholder="Search"
-            name="txt"
+            name="name"
           />
-          {/* <div className="fa search"></div> */}
         </div>
 
         <select name="inStock" value={inStock || ''} onChange={handleChange}>

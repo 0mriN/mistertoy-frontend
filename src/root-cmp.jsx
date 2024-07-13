@@ -1,6 +1,4 @@
 
-
-// import { Provider } from "react-redux"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 
 import { AppHeader } from "./cmps/AppHeader.jsx"
@@ -12,6 +10,9 @@ import { AppFooter } from "./cmps/AppFooter.jsx"
 import { Provider } from "react-redux"
 import { store } from "./store/store.js"
 import { UserMsg } from "./cmps/UserMsg.jsx"
+import { ToyDashboard } from "./pages/ToyDashboard.jsx"
+import { About } from "./pages/About.jsx"
+
 
 import "../src/scss/styles/styles.scss"
 
@@ -25,6 +26,8 @@ export function App() {
           <main>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/dashboard" element={<ToyDashboard />} />
+              <Route path="/about" element={<About/>} />
               <Route path="/toy" element={<ToyIndex />} />
               <Route path="/toy/:toyId" element={<ToyDetails />} />
               <Route path="/toy/edit/:toyId?" element={<ToyEdit />} />

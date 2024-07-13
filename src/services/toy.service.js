@@ -28,13 +28,12 @@ export const toyService = {
     getDefaultFilter,
     getDefaultSort,
     getToyLabels,
-
+    getLabelCounts,
 }
 
 
-function query(filterBy = {},sortBy, pageIdx) {
-    return httpService.get(BASE_URL, { filterBy,sortBy, pageIdx })
-
+function query(filterBy = {}, sortBy, pageIdx) {
+    return httpService.get(BASE_URL, { filterBy, sortBy, pageIdx })
 }
 
 function get(toyId) {
@@ -129,3 +128,28 @@ function _setNextPrevToyId(toy) {
     })
 }
 
+function getLabelCounts() {
+    return query().then(toys => {
+        console.log(toys)
+        const labelCounts = {}
+console.log('toyslabel:', toys);
+        toys.forEach(toy => {
+            console.log('toy:', toy);
+            toy.labels.forEach(label => {
+                console.log('label:', label);
+                if (labelCounts[label]) {
+                    labelCounts[label]++
+                } else {
+                    labelCounts[label] = 1
+                }
+            })
+        })
+        const labelCountArray = Object.entries(labelCounts).map(
+            ([label, count]) => ({
+                label,
+                count,
+            })
+        )
+        return labelCountArray
+    })
+}
