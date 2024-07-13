@@ -32,8 +32,8 @@ export const toyService = {
 }
 
 
-function query(filterBy = {}) {
-    return httpService.get(BASE_URL, { filterBy })
+function query(filterBy = {},sortBy, pageIdx) {
+    return httpService.get(BASE_URL, { filterBy,sortBy, pageIdx })
 
 }
 

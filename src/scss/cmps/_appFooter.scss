@@ -1,7 +1,8 @@
 footer {
-    padding-block-end: 20px;
+    @include headerFooterColor;
+
+    padding-block-end: rem(20px);
     display: flex;
     justify-content: center;
-    background-color: var(--clr1);
     margin-top: auto;
 }

@@ -5,7 +5,7 @@ export function PaginationBtns({ pageIdx, setPageIdx, toysLength }) {
           Previous
         </button>
         {pageIdx + 1}
-        <button onClick={() => setPageIdx(pageIdx + 1)} disabled={toysLength < 5}>
+        <button onClick={() => setPageIdx(pageIdx + 1)} disabled={toysLength < 3}>
           Next
         </button>
       </div>

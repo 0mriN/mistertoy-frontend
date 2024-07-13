@@ -11,8 +11,9 @@ import { ToyEdit } from "./pages/ToyEdit.jsx"
 import { AppFooter } from "./cmps/AppFooter.jsx"
 import { Provider } from "react-redux"
 import { store } from "./store/store.js"
-//add usermsg
-import "../src/assets/style/main.css"
+import { UserMsg } from "./cmps/UserMsg.jsx"
+
+import "../src/scss/styles/styles.scss"
 
 export function App() {
 
@@ -33,6 +34,7 @@ export function App() {
           <AppFooter />
         </section>
       </Router>
+      <UserMsg/>
     </Provider>
   )
 }

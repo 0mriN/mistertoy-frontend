@@ -1,0 +1,21 @@
+.toy-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    & h1 {
+        color: $clr1;
+        font-size: 2em;
+
+    }
+
+    & h5 {
+        color: $clr2;
+    }
+
+    & img {
+        max-width: rem(200px);
+        display: block;
+        margin: auto;
+    }
+}

@@ -1,0 +1,17 @@
+// button,
+// .btn {
+//     @include btn();
+
+//     &-dark {
+//         @include btn($type: dark)
+//     }
+
+//     &-light {
+//         @include btn($type: light)
+//     }
+// }
+
+input:focus {
+    background-color: darken(white, 30%);
+    transition: background-color 1s;
+}

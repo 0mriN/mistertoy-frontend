@@ -45,7 +45,7 @@ export function ToyIndex() {
   function onSetSort(sortBy) {
     setSort(sortBy)
   }
-
+if (!toys) return <Loader />
   return (
     <section className="toy-index">
       <ToyFilter
@@ -59,7 +59,10 @@ export function ToyIndex() {
           <Link to="/toy/edit" className="add-toy-btn btn">Add Toy</Link>
         </button>
       </div>
-      {<ToyList toys={toys} onRemoveToy={onRemoveToy} />}
+      {/* {isLoading && <Loader />}
+      {!isLoading &&  */}
+      <ToyList toys={toys} onRemoveToy={onRemoveToy} />
+      {/* } */}
       <PaginationBtns
         pageIdx={pageIdx}
         setPageIdx={setPageIdx}

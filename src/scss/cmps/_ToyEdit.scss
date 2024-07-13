@@ -1,0 +1,18 @@
+.toy-edit {
+    max-width: rem(300px);
+    margin: auto;
+
+    & form {
+        display: flex;
+        flex-direction: column;
+        font-size: 1.5rem;
+        font-family: 'Edu VIC WA NT Beginner', cursive;
+
+        & input {
+            margin-bottom: 1em;
+        }
+    }
+    
+    
+}
+

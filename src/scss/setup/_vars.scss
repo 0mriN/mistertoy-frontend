@@ -1,0 +1,14 @@
+$clr1: rgb(202, 48, 28);
+$clr2: rgb(177, 179, 50);
+
+$clr1bg: rgba(214, 25, 104, 0.623);
+$clr1bg-light: lighten($clr1bg, 10%);
+$clr1bg-dark: darken($clr1bg, 10%);
+
+$clr2bg: rgb(46, 192, 26);
+$clr2bg-light: lighten($clr2bg, 10%);
+$clr2bg-dark: darken($clr2bg, 10%);
+
+$gray1: rgba(173, 183, 204, 0.596);
+$gray2: rgb(155, 155, 155);
+$gray3: rgb(44, 44, 44);

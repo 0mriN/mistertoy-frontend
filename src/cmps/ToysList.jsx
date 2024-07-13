@@ -4,7 +4,7 @@ import { ToyPreview } from './ToyPreview.jsx'
 
 export function ToyList({ toys, onRemoveToy }) {
     return (
-        <section className="toy-list">
+        <section className="toy-list flex space-between">
             <ul>
                 {toys.map(toy => (
                     <li key={toy._id}>

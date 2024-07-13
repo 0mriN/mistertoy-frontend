@@ -4,7 +4,7 @@
 
 body {
     margin: 0;
-    color: var(--gray3);
+    color: $gray3;
 }
 
 h1,
@@ -38,11 +38,4 @@ object {
     outline: 1px solid gold
 }
 
-.about nav a {
-    margin-right: 10px;
-}
 
-.done {
-    text-decoration: line-through;
-    font-style: italic;
-}

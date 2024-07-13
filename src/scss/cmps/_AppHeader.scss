@@ -1,0 +1,24 @@
+.app-header {
+   @include headerFooterColor;
+    
+    .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    
+        .header-container .container {
+            gap: rem(15px);
+        }
+    }
+    
+    .app-nav {
+        display: flex;
+        gap: rem(15px);
+    }
+    
+    a.active {
+        color: rgba(11, 215, 230, 0.938);
+        font-weight: 600;
+        text-decoration: underline;
+    }
+}

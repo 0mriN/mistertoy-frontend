@@ -21,8 +21,8 @@ export function loadToys(pageIdx) {
         throw err
       })
       .finally(() => {
-        console.log("HHI")
         setTimeout(() => {
+          console.log("HHI")
           store.dispatch({ type: SET_IS_LOADING, isLoading: false })
         }, 350)
       })
