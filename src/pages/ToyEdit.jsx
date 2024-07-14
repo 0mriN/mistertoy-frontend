@@ -15,13 +15,14 @@ export function ToyEdit() {
         if (params.toyId) loadToy()
     }, [])
 
-    function loadToy() {
-        toyService.get(params.toyId)
-            .then(toy => {
-                console.log('toy:', toy);
-                setToyToEdit(toy)
-            })
-            .catch(err => console.log('err:', err))
+    async function loadToy() {
+        try {
+            const toy = await toyService.get(params.toyId)
+            console.log('toy:', toy);
+            setToyToEdit(toy)
+        } catch (err) {
+            console.log('err:', err)
+        }
     }
 
     function handleChange({ target }) {
@@ -45,17 +46,16 @@ export function ToyEdit() {
         setToyToEdit(prevToyToEdit => ({ ...prevToyToEdit, [field]: value }))
     }
 
-    function onSaveToy(ev) {
+    async function onSaveToy(ev) {
         ev.preventDefault()
-        saveToy(toyToEdit)
-            .then((savedToy) => {
-                navigate('/toy')
-                showSuccessMsg(`Toy Saved (id: ${savedToy._id})`)
-            })
-            .catch(err => {
-                showErrorMsg('Cannot save toy')
-                console.log('err:', err)
-            })
+        try {
+            const savedToy = await saveToy(toyToEdit)
+            navigate('/toy')
+            showSuccessMsg(`Toy Saved (id: ${savedToy._id})`)
+        } catch (err) {
+            showErrorMsg('Cannot save toy')
+            console.log('err:', err)
+        }
     }
 
 

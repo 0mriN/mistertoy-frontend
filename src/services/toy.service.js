@@ -1,4 +1,4 @@
-// import { storageService } from "./async-storage.service.js"
+
 
 import { httpService } from "./http.service.js"
 import { utilService } from "./util.service.js"
@@ -6,7 +6,6 @@ import { utilService } from "./util.service.js"
 const BASE_URL = 'toy/'
 const TOY_KEY = 'toyDB'
 const PAGE_SIZE = 3
-// _createToys()
 
 const labels = [
     'Hero',
@@ -117,22 +116,13 @@ function _createToy(name, price) {
     return toy
 }
 
-function _setNextPrevToyId(toy) {
-    return storageService.query(TOY_KEY).then((toys) => {
-        const toyIdx = toys.findIndex((currToy) => currToy._id === toy._id)
-        const nextToy = toys[toyIdx + 1] ? toys[toyIdx + 1] : toys[0]
-        const prevToy = toys[toyIdx - 1] ? toys[toyIdx - 1] : toys[toys.length - 1]
-        toy.nextToyId = nextToy._id
-        toy.prevToyId = prevToy._id
-        return toy
-    })
-}
 
-function getLabelCounts() {
-    return query().then(toys => {
+async function getLabelCounts() {
+    try {
+        const toys = await query()
         console.log(toys)
         const labelCounts = {}
-console.log('toyslabel:', toys);
+        console.log('toyslabel:', toys);
         toys.forEach(toy => {
             console.log('toy:', toy);
             toy.labels.forEach(label => {
@@ -151,5 +141,8 @@ console.log('toyslabel:', toys);
             })
         )
         return labelCountArray
-    })
+    } catch (err) {
+        console.log('err:', err);
+    }
+
 }

@@ -3,7 +3,7 @@
 
 
 
-import { ArcElement, CategoryScale,Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from "chart.js"
+import { ArcElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from "chart.js"
 import { useEffect, useState } from "react"
 import { Doughnut } from "react-chartjs-2"
 import { toyService } from "../services/toy.service.js"
@@ -26,11 +26,14 @@ export function LabelsDoughnut() {
         fetchLabels()
     }, [])
 
-    function fetchLabels() {
-        toyService.getLabelCounts().then(labelCounts => {
+    async function fetchLabels() {
+        try {
+            const labelCounts = await toyService.getLabelCounts()
             // console.log('labelCounts:', labelCounts)
             setData(labelCounts)
-        })
+        } catch (err) {
+            console.log('err:', err);
+        }
     }
 
     function setData(labelCounts) {

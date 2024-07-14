@@ -11,25 +11,25 @@ export function ToyDetails() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        loadToy()
-    }, [params.toyId])
-
-
-    function loadToy() {
-        toyService.get(params.toyId)
-            .then(setToy)
-            .catch(err => {
+        const loadToy = async () => {
+            try {
+                const loadedToy = await toyService.get(params.toyId)
+                setToy(loadedToy)
+            } catch (err) {
                 console.error('err:', err)
                 showErrorMsg('Cannot load toy')
                 navigate('/toy')
-            })
-    }
+            }
+        }
+        loadToy()
+    }, [params.toyId, navigate])
 
     function onBack() {
-        navigate('/')
+        navigate('/toy')
     }
 
     if (!toy) return <div>Loading...</div>
+
     return (
         <section className="toy-details">
 

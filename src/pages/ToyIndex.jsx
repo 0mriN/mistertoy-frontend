@@ -19,23 +19,24 @@ export function ToyIndex() {
   const [pageIdx, setPageIdx] = useState(0)
 
   useEffect(() => {
-    loadToys(pageIdx)
-      .catch(err => {
-        console.log('err:', err)
-        showErrorMsg('Cannot load toys')
-      })
+    try {
+      loadToys(pageIdx)
+
+    } catch (err) {
+      console.log('err:', err)
+      showErrorMsg('Cannot load toys')
+    }
   }, [filterBy, sortBy, pageIdx])
 
-  function onRemoveToy(toyId) {
-    removeToy(toyId)
-      .then(() => {
-        loadToys(pageIdx)
-        showSuccessMsg('Toy removed')
-      })
-      .catch(err => {
-        console.log('Cannot remove toy', err)
-        showErrorMsg('Cannot remove toy')
-      })
+  async function onRemoveToy(toyId) {
+    try {
+      const removedToy = await removeToy(toyId)
+      loadToys(pageIdx)
+      showSuccessMsg('Toy removed')
+    } catch (err) {
+      console.log('Cannot remove toy', err)
+      showErrorMsg('Cannot remove toy')
+    }
   }
 
   function onSetFilter(filterBy) {
@@ -45,7 +46,7 @@ export function ToyIndex() {
   function onSetSort(sortBy) {
     setSort(sortBy)
   }
-if (!toys) return <Loader />
+  if (!toys) return <Loader />
   return (
     <section className="toy-index">
       <ToyFilter
