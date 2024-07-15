@@ -28,11 +28,20 @@ export const toyService = {
     getDefaultSort,
     getToyLabels,
     getLabelCounts,
+    addMsg,
+    removeMsg
 }
 
 
-function query(filterBy = {}, sortBy, pageIdx) {
-    return httpService.get(BASE_URL, { filterBy, sortBy, pageIdx })
+// function query(filterBy = {}) {
+    // }
+    function query(filterBy = {}, sortBy, pageIdx) {
+        // const filter = {filterBy,sortBy,pageIdx}
+        console.log('filterBy:', filterBy);
+        console.log('sortBy:', sortBy);
+        
+        return httpService.get(BASE_URL,filterBy)
+    // return httpService.get(BASE_URL, { filterBy, sortBy, pageIdx })
 }
 
 function get(toyId) {
@@ -46,11 +55,22 @@ function remove(toyId) {
 
 }
 
-function save(toy) {
-    const method = toy._id ? 'put' : 'post'
-    return httpService[method](BASE_URL, toy)
+async function save(toy) {
+    let savedToy
+    if (toy._id) {
+      savedToy = await httpService.put(BASE_URL + toy._id, toy)
+    } else {
+      savedToy = await httpService.post(BASE_URL, toy)
+    }
+    console.log("savedToy in front", savedToy)
+    return savedToy
+  }
 
-}
+// async function save(toy) {
+//     const method = toy._id ? 'put' : 'post'
+//     return httpService[method](BASE_URL, toy)
+
+// }
 
 function getDefaultFilter() {
     return {
@@ -77,6 +97,15 @@ function getToyLabels() {
     return [...labels]
 }
 
+async function addMsg(toyId, txt) {
+    const savedMsg = await httpService.post(`toy/${toyId}/msg`, { txt })
+    return savedMsg
+  }
+
+  async function removeMsg(toyId, msgId) {
+    const removedId = await httpService.delete(`toy/${toyId}/msg/${msgId}`)
+    return removedId
+  }
 
 function _getRandomLabels() {
     const labelsCopy = [...labels]

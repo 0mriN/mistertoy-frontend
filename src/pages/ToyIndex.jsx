@@ -15,7 +15,7 @@ export function ToyIndex() {
   const filterBy = useSelector(storeState => storeState.toyModule.filterBy)
   const sortBy = useSelector(storeState => storeState.toyModule.sortBy)
   const isLoading = useSelector(storeState => storeState.toyModule.isLoading)
-
+  const user = useSelector((storeState) => storeState.userModule.loggedinUser)
   const [pageIdx, setPageIdx] = useState(0)
 
   useEffect(() => {

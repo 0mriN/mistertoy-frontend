@@ -27,8 +27,11 @@ export async function loadToys(pageIdx) {
 export async function saveToy(toy) {
   const type = toy._id ? UPDATE_TOY : ADD_TOY
   try {
+    console.log('1');
     const toyToSave = await toyService.save(toy)
+    console.log('2');
     store.dispatch({ type, toy: toyToSave })
+    console.log('3');
     return toyToSave
   } catch (err) {
     console.log('toy action -> Cannot save toy', err)
